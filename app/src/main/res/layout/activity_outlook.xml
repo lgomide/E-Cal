@@ -1,0 +1,35 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".OutlookActivity">
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Logout"
+        android:id="@+id/OutlookLogOut"
+        android:onClick="logoutOutlook"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true" />
+
+    <DatePicker
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/OutlookStartDate"
+        android:spinnersShown="true"
+        android:datePickerMode="spinner"
+        android:calendarViewShown="false"
+        android:layout_below="@+id/OutlookLogOut"
+        android:layout_alignEnd="@+id/OutlookLogOut" />
+
+    <DatePicker
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/OutookEndDate"
+        android:layout_below="@+id/OutlookStartDate"
+        android:layout_alignParentEnd="true"
+        android:calendarViewShown="false" />
+</RelativeLayout>

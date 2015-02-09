@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/E-Cal.iml" filepath="$PROJECT_DIR$/E-Cal.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LiveSDK-for-Android-master/src/LiveSDK.iml" filepath="$PROJECT_DIR$/LiveSDK-for-Android-master/src/LiveSDK.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

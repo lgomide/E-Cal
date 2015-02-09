@@ -4,5 +4,8 @@
     <string name="app_name">E-Cal</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_start">StartActivity</string>
+    <string name="title_activity_google">GoogleActivity</string>
+    <string name="title_activity_outlook">OutlookActivity</string>
 
 </resources>

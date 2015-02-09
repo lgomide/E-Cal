@@ -2,19 +2,29 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="edu.utexas.ee464k.e_cal" >
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name" >
+            android:name=".OutlookActivity"
+            android:label="@string/title_activity_outlook">
+        </activity>
+        <activity
+            android:name=".StartActivity"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".GoogleActivity"
+            android:label="@string/title_activity_google" >
         </activity>
     </application>
 
