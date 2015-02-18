@@ -2,7 +2,9 @@ package edu.utexas.ee464k.e_cal;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -20,9 +22,12 @@ import com.microsoft.live.LiveOperationException;
 import com.microsoft.live.LiveOperationListener;
 import com.microsoft.live.LiveStatus;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Locale;
@@ -40,6 +45,7 @@ public class OutlookActivity extends Activity implements LiveAuthListener {
     private boolean eventName;
     private boolean eventLocation;
     private boolean eventDescription;
+    static ArrayList<CalendarEvent> Events = new ArrayList<CalendarEvent>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,10 +175,93 @@ public class OutlookActivity extends Activity implements LiveAuthListener {
             return;
         }
         int startMonth = startCalendar.get(Calendar.MONTH) + 1;
+        String startMonthString;
+        if(startMonth/10 == 0){
+            startMonthString = "0"+startMonth;
+        } else{
+            startMonthString = String.valueOf(startMonth);
+        }
         int endMonth = endCalendar.get(Calendar.MONTH) + 1;
-        String startDateString = startCalendar.get(Calendar.YEAR)+"-"+startMonth+"-"+startCalendar.get(Calendar.DAY_OF_MONTH)+"T00:00:00.000";
-        String endDateString = endCalendar.get(Calendar.YEAR)+"-"+endMonth+"-"+endCalendar.get(Calendar.DAY_OF_MONTH)+"T23:59:00.000";
+        String endMonthString;
+        if(endMonth/10 == 0){
+            endMonthString = "0" + endMonth;
+        }else{
+            endMonthString = String.valueOf(endMonth);
+        }
+        int startDay = startCalendar.get(Calendar.DAY_OF_MONTH);
+        String startDayString;
+        if(startDay / 10 == 0){
+            startDayString = "0" + startDay;
+        }else{
+            startDayString = String.valueOf(startDay);
+        }
+        int endDay = endCalendar.get(Calendar.DAY_OF_MONTH);
+        String endDayString;
+        if(endDay / 10 == 0){
+            endDayString = "0" + endDay;
+        }else{
+            endDayString = String.valueOf(endDay);
+        }
+        String startDateString = startCalendar.get(Calendar.YEAR)+"-"+startMonthString+"-"+startDayString+"T00:00:00.000";
+        String endDateString = endCalendar.get(Calendar.YEAR)+"-"+endMonthString+"-"+endDayString+"T23:59:00.000";
         Toast.makeText(this,eventName+" "+eventLocation+" "+eventDescription+" "+startDateString+" "+endDateString,Toast.LENGTH_LONG).show();
+        client.getAsync("me/events?start_time="+startDateString+"Z&end_time="+endDateString+"Z",new LiveOperationListener() {
+            @Override
+            public void onComplete(LiveOperation operation) {
+                JSONObject result = operation.getResult();
+                try {
+                    JSONArray events = result.getJSONArray("data");
+                    for(int i = 0; i < events.length(); i++){
+                        JSONObject jsonEvent = events.getJSONObject(i);
+                        if(jsonEvent.getString("availability").equals("busy")) {
+                            CalendarEvent event = new CalendarEvent();
+                            String endTime = jsonEvent.getString("end_time");
+                            String[] splits = endTime.split("-");
+                            event.setEndYear(splits[0]);
+                            event.setEndMonth(splits[1]);
+                            splits = splits[2].split("T");
+                            event.setEndDay(splits[0]);
+                            splits = splits[1].split(":");
+                            event.setEndHour_Of_Day(splits[0]);
+                            event.setEndMinute(splits[1]);
+                            //event.setEndTime(jsonEvent.getString("end_time"));//2015-02-16T13:30:00
+                            String startTime = jsonEvent.getString("start_time");
+                            splits = startTime.split("-");
+                            event.setStartYear(splits[0]);
+                            event.setStartMonth(splits[1]);
+                            splits = splits[2].split("T");
+                            event.setStartDay(splits[0]);
+                            splits = splits[1].split(":");
+                            event.setStartHour_Of_Day(splits[0]);
+                            event.setStartMinute(splits[1]);
+                            //event.setStartTime(jsonEvent.getString("start_time"));
+                            if (eventName) {
+                                event.setName(jsonEvent.getString("name"));
+                            }
+                            if (eventLocation) {
+                                event.setLocation(jsonEvent.getString("location"));
+                            }
+                            if (eventDescription) {
+                                event.setDescription(jsonEvent.getString("description"));
+                            }
+                            Events.add(event);
+                        }
+                    }
+                } catch(JSONException e){
+                    e.printStackTrace();
+                }
+                Intent i = new Intent(OutlookActivity.this,EventsActivity.class);
+                Bundle data = new Bundle();
+                data.putParcelableArrayList("events", Events);
+                i.putExtra("data", data);
+                startActivity(i);
+            }
+
+            @Override
+            public void onError(LiveOperationException exception, LiveOperation operation) {
+                Toast.makeText(OutlookActivity.this,"Unable to get calendar data: "+exception.getMessage(),Toast.LENGTH_LONG).show();
+            }
+        });
 
     }
 

@@ -7,5 +7,10 @@
     <string name="title_activity_start">StartActivity</string>
     <string name="title_activity_google">GoogleActivity</string>
     <string name="title_activity_outlook">OutlookActivity</string>
+    <string name="title_activity_events">EventsActivity</string>
+    <string name="action_today">Go to today</string>
+    <string name="action_day_view">Day view</string>
+    <string name="action_three_day_view">3 day view</string>
+    <string name="action_week_view">Week view</string>
 
 </resources>
