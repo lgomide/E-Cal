@@ -45,7 +45,9 @@ public class OutlookActivity extends Activity implements LiveAuthListener {
     private boolean eventName;
     private boolean eventLocation;
     private boolean eventDescription;
-    static ArrayList<CalendarEvent> Events = new ArrayList<CalendarEvent>();
+    private ArrayList<CalendarEvent> Events = new ArrayList<CalendarEvent>();
+    private String deviceId;
+    private String userName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,7 +121,8 @@ public class OutlookActivity extends Activity implements LiveAuthListener {
                 @Override
                 public void onComplete(LiveOperation operation) {
                     JSONObject result = operation.getResult();
-                    outlookUser.setText(result.optString("name"));
+                    userName = result.optString("name");
+                    outlookUser.setText(userName);
                 }
 
                 @Override
@@ -165,11 +168,12 @@ public class OutlookActivity extends Activity implements LiveAuthListener {
             Toast.makeText(this,"Must enter Device id",Toast.LENGTH_LONG).show();
             return;
         }
-        int deviceId = Integer.parseInt(deviceIdBox.getText().toString());
-        if(deviceId != 1){
+        int deviceIdInt = Integer.parseInt(deviceIdBox.getText().toString());
+        if(deviceIdInt != 1){
             Toast.makeText(this,"Incorrect device Id",Toast.LENGTH_LONG).show();
             return;
         }
+        deviceId = String.valueOf(deviceIdInt);
         if(startCalendar.after(endCalendar)){
             Toast.makeText(this,"Start Date is after End Date", Toast.LENGTH_LONG).show();
             return;
@@ -254,6 +258,8 @@ public class OutlookActivity extends Activity implements LiveAuthListener {
                 Bundle data = new Bundle();
                 data.putParcelableArrayList("events", Events);
                 i.putExtra("data", data);
+                i.putExtra("deviceId",deviceId);
+                i.putExtra("userName", userName);
                 startActivity(i);
             }
 
