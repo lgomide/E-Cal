@@ -6,6 +6,10 @@
         android:title="@string/action_today"
         android:orderInCategory="100"
         app:showAsAction="ifRoom"/>
+    <item android:id="@+id/action_add_event"
+        android:title="@string/action_add_event"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom"/>
     <item android:id="@+id/action_upload_events"
         android:title="Upload Events"
         android:orderInCategory="100"
