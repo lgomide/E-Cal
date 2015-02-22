@@ -128,6 +128,162 @@ public class EventsActivity extends Activity implements WeekView.MonthChangeList
                     mWeekView.setEventTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 10, getResources().getDisplayMetrics()));
                 }
                 return true;
+            case R.id.action_add_event:
+                final CalendarEvent event = new CalendarEvent();
+                LayoutInflater inflater = LayoutInflater.from(EventsActivity.this);
+                final View calendarEventsDialogView = inflater.inflate(R.layout.fragment_edit_event, null);
+                final EditText eventDescription = (EditText) calendarEventsDialogView.findViewById(R.id.eventDescription);
+                final EditText eventName = (EditText) calendarEventsDialogView.findViewById(R.id.eventName);
+                final EditText eventLocation = (EditText) calendarEventsDialogView.findViewById(R.id.eventLocation);
+                final EditText startDate = (EditText) calendarEventsDialogView.findViewById(R.id.startDate);
+                final EditText startTime = (EditText) calendarEventsDialogView.findViewById(R.id.startTime);
+                final EditText endDate = (EditText) calendarEventsDialogView.findViewById(R.id.endDate);
+                final EditText endTime = (EditText) calendarEventsDialogView.findViewById(R.id.endTime);
+                Calendar Cal = Calendar.getInstance();
+                event.setStartYear(Cal.get(Calendar.YEAR));
+                event.setStartMonth(Cal.get(Calendar.MONTH)+1);
+                event.setStartDay(Cal.get(Calendar.DAY_OF_MONTH));
+                event.setStartHour_Of_Day(Cal.get(Calendar.HOUR_OF_DAY));
+                event.setStartMinute(Cal.get(Calendar.MINUTE));
+                Cal.add(Calendar.HOUR_OF_DAY,1);
+                event.setEndMonth(Cal.get(Calendar.MONTH)+1);
+                event.setEndMinute(Cal.get(Calendar.MINUTE));
+                event.setEndYear(Cal.get(Calendar.YEAR));
+                event.setEndDay(Cal.get(Calendar.DAY_OF_MONTH));
+                event.setEndHour_Of_Day(Cal.get(Calendar.HOUR_OF_DAY));
+                startDate.setText(event.getStartMonth()+"/"+event.getStartDay()+"/"+event.getStartYear());
+                startTime.setText(event.getStartHour_Of_Day()+":"+event.getStartMinute());
+                endDate.setText(event.getEndMonth()+"/"+event.getEndDay()+"/"+event.getEndYear());
+                endTime.setText(event.getEndHour_Of_Day()+":"+event.getEndMinute());
+                final TimePickerDialog.OnTimeSetListener timeStartListener = new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        Calendar startTimeCal = Calendar.getInstance();
+                        startTimeCal.set(Integer.parseInt(event.getStartYear()),Integer.parseInt(event.getStartMonth()) - 1,
+                                Integer.parseInt(event.getStartDay()),hourOfDay,minute);
+                        Calendar endTimeCal = Calendar.getInstance();
+                        endTimeCal.set(Integer.parseInt(event.getEndYear()),Integer.parseInt(event.getEndMonth()) - 1,
+                                Integer.parseInt(event.getEndDay()),Integer.parseInt(event.getEndHour_Of_Day()),Integer.parseInt(event.getEndMinute()));
+                        if(startTimeCal.after(endTimeCal)){
+                            event.setEndDay(event.getStartDay());
+                            event.setEndMonth(event.getStartMonth());
+                            event.setEndYear(event.getStartYear());
+                            event.setEndHour_Of_Day(hourOfDay + 1);
+                            event.setEndMinute(minute);
+                            endTime.setText(event.getEndHour_Of_Day()+":"+event.getEndMinute());
+                        }
+                        event.setStartHour_Of_Day(hourOfDay);
+                        event.setStartMinute(minute);
+                        startTime.setText(hourOfDay+":"+minute);
+                    }
+                };
+                startTime.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        new TimePickerDialog(EventsActivity.this,timeStartListener,Integer.parseInt(event.getStartHour_Of_Day()),
+                                Integer.parseInt(event.getStartMinute()),true).show();
+                    }
+                });
+                final DatePickerDialog.OnDateSetListener startDateListener = new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        Calendar startDateCal = Calendar.getInstance();
+                        startDateCal.set(year,monthOfYear,dayOfMonth);
+                        Calendar endDateCal = Calendar.getInstance();
+                        endDateCal.set(Integer.parseInt(event.getEndYear()),Integer.parseInt(event.getEndMonth()) - 1,Integer.parseInt(event.getEndDay()));
+                        if(startDateCal.after(endDateCal)){
+                            event.setEndDay(dayOfMonth);
+                            event.setEndMonth(monthOfYear + 1);
+                            event.setEndYear(year);
+                            endDate.setText(event.getEndMonth()+"/"+event.getEndDay()+"/"+event.getEndYear());
+                        }
+                        event.setStartDay(dayOfMonth);
+                        event.setStartMonth(monthOfYear + 1);
+                        event.setStartYear(year);
+                        startDate.setText(event.getStartMonth()+"/"+event.getStartDay()+"/"+event.getStartYear());
+                    }
+                };
+                startDate.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        new DatePickerDialog(EventsActivity.this, startDateListener,Integer.parseInt(event.getStartYear()),
+                                Integer.parseInt(event.getStartMonth()) - 1,Integer.parseInt(event.getStartDay())).show();
+                    }
+                });
+                final TimePickerDialog.OnTimeSetListener endTimeListener = new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        Calendar startTimeCal = Calendar.getInstance();
+                        Calendar endTimeCal = Calendar.getInstance();
+                        endTimeCal.set(Integer.parseInt(event.getEndYear()),Integer.parseInt(event.getEndMonth()) - 1,
+                                Integer.parseInt(event.getEndDay()),hourOfDay,minute);
+                        startTimeCal.set(Integer.parseInt(event.getStartYear()),Integer.parseInt(event.getStartMonth()) - 1,
+                                Integer.parseInt(event.getStartDay()),Integer.parseInt(event.getStartHour_Of_Day()),Integer.parseInt(event.getStartMinute()));
+                        if(startTimeCal.after(endTimeCal)){
+                            event.setStartDay(event.getEndDay());
+                            event.setStartMonth(event.getEndMonth());
+                            event.setStartYear(event.getEndYear());
+                            event.setStartHour_Of_Day(hourOfDay - 1);
+                            event.setStartMinute(minute);
+                            startTime.setText(event.getStartHour_Of_Day()+":"+event.getStartMinute());
+                        }
+                        event.setEndHour_Of_Day(hourOfDay);
+                        event.setEndMinute(minute);
+                        endTime.setText(hourOfDay+":"+minute);
+                    }
+                };
+                endTime.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        new TimePickerDialog(EventsActivity.this,endTimeListener,Integer.parseInt(event.getEndHour_Of_Day()),
+                                Integer.parseInt(event.getEndMinute()),true).show();
+                    }
+                });
+                final DatePickerDialog.OnDateSetListener endDateListener = new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        Calendar startDateCal = Calendar.getInstance();
+                        Calendar endDateCal = Calendar.getInstance();
+                        endDateCal.set(year,monthOfYear,dayOfMonth);
+                        startDateCal.set(Integer.parseInt(event.getStartYear()),Integer.parseInt(event.getStartMonth()) - 1,Integer.parseInt(event.getStartDay()));
+                        if(startDateCal.after(endDateCal)){
+                            event.setStartDay(dayOfMonth);
+                            event.setStartMonth(monthOfYear + 1);
+                            event.setStartYear(year);
+                            startDate.setText(event.getStartMonth()+"/"+event.getStartDay()+"/"+event.getStartYear());
+                        }
+                        event.setEndDay(dayOfMonth);
+                        event.setEndMonth(monthOfYear + 1);
+                        event.setEndYear(year);
+                        endDate.setText(event.getEndMonth()+"/"+event.getEndDay()+"/"+event.getEndYear());
+                    }
+                };
+                endDate.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        new DatePickerDialog(EventsActivity.this,endDateListener,Integer.parseInt(event.getEndYear()),
+                                Integer.parseInt(event.getEndMonth()) - 1,Integer.parseInt(event.getEndDay())).show();
+                    }
+                });
+                AlertDialog dialog = new AlertDialog.Builder(EventsActivity.this)
+                        .setTitle("Add Event")
+                        .setView(calendarEventsDialogView)
+                        .setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                event.setName(eventName.getText().toString());
+                                event.setDescription(eventDescription.getText().toString());
+                                event.setLocation(eventLocation.getText().toString());
+                                mWeekView.notifyDatasetChanged();
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        }).create();
+                dialog.show();
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -175,15 +331,17 @@ public class EventsActivity extends Activity implements WeekView.MonthChangeList
 
         LayoutInflater inflater = LayoutInflater.from(EventsActivity.this);
         final View calendarEventDialogView = inflater.inflate(R.layout.fragment_edit_event, null);
-        final TextView eventDescription = (TextView) calendarEventDialogView.findViewById(R.id.eventDescription);
+        final EditText eventDescription = (EditText) calendarEventDialogView.findViewById(R.id.eventDescription);
         eventDescription.setText(cEvent.getDescription());
-        final TextView eventLocation = (TextView) calendarEventDialogView.findViewById(R.id.evenLocation);
+        final EditText eventLocation = (EditText) calendarEventDialogView.findViewById(R.id.eventLocation);
         eventLocation.setText(cEvent.getLocation());
         final EditText startTime = (EditText) calendarEventDialogView.findViewById(R.id.startTime);
         startTime.setText(cEvent.getStartHour_Of_Day()+":"+cEvent.getStartMinute());
         final EditText startDate = (EditText) calendarEventDialogView.findViewById(R.id.startDate);
         final EditText endTime = (EditText) calendarEventDialogView.findViewById(R.id.endTime);
         final EditText endDate = (EditText) calendarEventDialogView.findViewById(R.id.endDate);
+        final EditText eventName = (EditText) calendarEventDialogView.findViewById(R.id.eventName);
+        eventName.setText(cEvent.getName());
         final TimePickerDialog.OnTimeSetListener timeStartListener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -197,12 +355,12 @@ public class EventsActivity extends Activity implements WeekView.MonthChangeList
                     cEvent.setEndDay(cEvent.getStartDay());
                     cEvent.setEndMonth(cEvent.getStartMonth());
                     cEvent.setEndYear(cEvent.getStartYear());
-                    cEvent.setEndHour_Of_Day(String.valueOf(hourOfDay + 1));
-                    cEvent.setEndMinute(String.valueOf(minute));
+                    cEvent.setEndHour_Of_Day(hourOfDay + 1);
+                    cEvent.setEndMinute(minute);
                     endTime.setText(cEvent.getEndHour_Of_Day()+":"+cEvent.getEndMinute());
                 }
-                cEvent.setStartHour_Of_Day(String.valueOf(hourOfDay));
-                cEvent.setStartMinute(String.valueOf(minute));
+                cEvent.setStartHour_Of_Day(hourOfDay);
+                cEvent.setStartMinute(minute);
                 startTime.setText(hourOfDay+":"+minute);
             }
         };
@@ -222,14 +380,14 @@ public class EventsActivity extends Activity implements WeekView.MonthChangeList
                 Calendar endDateCal = Calendar.getInstance();
                 endDateCal.set(Integer.parseInt(cEvent.getEndYear()),Integer.parseInt(cEvent.getEndMonth()) - 1,Integer.parseInt(cEvent.getEndDay()));
                 if(startDateCal.after(endDateCal)){
-                    cEvent.setEndDay(String.valueOf(dayOfMonth));
-                    cEvent.setEndMonth(String.valueOf(monthOfYear + 1));
-                    cEvent.setEndYear(String.valueOf(year));
+                    cEvent.setEndDay(dayOfMonth);
+                    cEvent.setEndMonth(monthOfYear + 1);
+                    cEvent.setEndYear(year);
                     endDate.setText(cEvent.getEndMonth()+"/"+cEvent.getEndDay()+"/"+cEvent.getEndYear());
                 }
-                cEvent.setStartDay(String.valueOf(dayOfMonth));
-                cEvent.setStartMonth(String.valueOf(monthOfYear + 1));
-                cEvent.setStartYear(String.valueOf(year));
+                cEvent.setStartDay(dayOfMonth);
+                cEvent.setStartMonth(monthOfYear + 1);
+                cEvent.setStartYear(year);
                 startDate.setText(cEvent.getStartMonth()+"/"+cEvent.getStartDay()+"/"+cEvent.getStartYear());
             }
         };
@@ -254,12 +412,12 @@ public class EventsActivity extends Activity implements WeekView.MonthChangeList
                     cEvent.setStartDay(cEvent.getEndDay());
                     cEvent.setStartMonth(cEvent.getEndMonth());
                     cEvent.setStartYear(cEvent.getEndYear());
-                    cEvent.setStartHour_Of_Day(String.valueOf(hourOfDay - 1));
-                    cEvent.setStartMinute(String.valueOf(minute));
+                    cEvent.setStartHour_Of_Day(hourOfDay - 1);
+                    cEvent.setStartMinute(minute);
                     startTime.setText(cEvent.getStartHour_Of_Day()+":"+cEvent.getStartMinute());
                 }
-                cEvent.setEndHour_Of_Day(String.valueOf(hourOfDay));
-                cEvent.setEndMinute(String.valueOf(minute));
+                cEvent.setEndHour_Of_Day(hourOfDay);
+                cEvent.setEndMinute(minute);
                 endTime.setText(hourOfDay+":"+minute);
             }
         };
@@ -279,14 +437,14 @@ public class EventsActivity extends Activity implements WeekView.MonthChangeList
                 endDateCal.set(year,monthOfYear,dayOfMonth);
                 startDateCal.set(Integer.parseInt(cEvent.getStartYear()),Integer.parseInt(cEvent.getStartMonth()) - 1,Integer.parseInt(cEvent.getStartDay()));
                 if(startDateCal.after(endDateCal)){
-                    cEvent.setStartDay(String.valueOf(dayOfMonth));
-                    cEvent.setStartMonth(String.valueOf(monthOfYear + 1));
-                    cEvent.setStartYear(String.valueOf(year));
+                    cEvent.setStartDay(dayOfMonth);
+                    cEvent.setStartMonth(monthOfYear + 1);
+                    cEvent.setStartYear(year);
                     startDate.setText(cEvent.getStartMonth()+"/"+cEvent.getStartDay()+"/"+cEvent.getStartYear());
                 }
-                cEvent.setEndDay(String.valueOf(dayOfMonth));
-                cEvent.setEndMonth(String.valueOf(monthOfYear + 1));
-                cEvent.setEndYear(String.valueOf(year));
+                cEvent.setEndDay(dayOfMonth);
+                cEvent.setEndMonth(monthOfYear + 1);
+                cEvent.setEndYear(year);
                 endDate.setText(cEvent.getEndMonth()+"/"+cEvent.getEndDay()+"/"+cEvent.getEndYear());
             }
         };
@@ -298,11 +456,14 @@ public class EventsActivity extends Activity implements WeekView.MonthChangeList
             }
         });
         AlertDialog dialog = new AlertDialog.Builder(EventsActivity.this)
-                .setTitle(cEvent.getName())
+                .setTitle("Edit Event")
                 .setView(calendarEventDialogView)
                 .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        cEvent.setName(eventName.getText().toString());
+                        cEvent.setDescription(eventDescription.getText().toString());
+                        cEvent.setLocation(eventLocation.getText().toString());
                         mWeekView.notifyDatasetChanged();
                     }
                 })

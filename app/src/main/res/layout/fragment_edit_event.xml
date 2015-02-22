@@ -1,112 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:layout_height="wrap_content">
 
-    <LinearLayout
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:text="Event Name: "
+        android:id="@+id/eventNameLabel"
+        android:layout_alignParentLeft="true"
+        android:layout_alignBottom="@+id/eventName"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Event Description: "
-            android:id="@+id/eventDescriptionLabel" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Event Location: "
-            android:id="@+id/eventLocationLabel"
-            android:paddingTop="10dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Start Date: "
-            android:id="@+id/startDateLabel"
-            android:paddingTop="23dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Start Time: "
-            android:id="@+id/startTimeLabel"
-            android:paddingTop="23dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="End Date: "
-            android:id="@+id/endDateLabel"
-            android:paddingTop="23dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="End Time: "
-            android:id="@+id/endTimeLabel"
-            android:paddingTop="23dp"/>
-
-        </LinearLayout>
-
-    <LinearLayout
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingLeft="10dp">
+        android:text="Event Description: "
+        android:id="@+id/eventDescriptionLabel"
+        android:layout_alignBottom="@+id/eventDescription"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/eventDescription"
-            android:text="eventDescription"
-            android:paddingBottom="10dp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Event Location: "
+        android:id="@+id/eventLocationLabel"
+        android:layout_alignBottom="@+id/eventLocation"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/evenLocation"
-            android:text="eventLocation"
-            android:paddingBottom="10dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start Date: "
+        android:id="@+id/startDateLabel"
+        android:layout_alignBottom="@+id/startDate"/>
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/startDate"
-            android:focusable="false"
-            android:text="startDate"
-            android:inputType="date"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start Time: "
+        android:id="@+id/startTimeLabel"
+        android:layout_alignBottom="@+id/startTime"/>
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/startTime"
-            android:focusable="false"
-            android:text="startTime"
-            android:inputType="time"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="End Date: "
+        android:id="@+id/endDateLabel"
+        android:layout_alignBottom="@+id/endDate"/>
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/endDate"
-            android:focusable="false"
-            android:text="endDate"
-            android:inputType="date"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="End Time: "
+        android:id="@+id/endTimeLabel"
+        android:layout_alignBottom="@+id/endTime"/>
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/endTime"
-            android:focusable="false"
-            android:text="endTime"
-            android:inputType="time"/>
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/eventName"
+        android:text="Event Name"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:maxWidth="200dp" />
 
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/eventDescription"
+        android:text="Event Description"
+        android:layout_below="@+id/eventName"
+        android:layout_alignParentRight="true"
+        android:maxWidth="200dp" />
 
-    </LinearLayout>
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/eventLocation"
+        android:text="Event Location"
+        android:layout_below="@+id/eventDescription"
+        android:layout_alignParentRight="true"
+        android:maxWidth="200dp" />
 
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/startDate"
+        android:focusable="false"
+        android:text="mm/dd/yyyy"
+        android:inputType="date"
+        android:layout_below="@+id/eventLocation"
+        android:layout_alignParentRight="true"/>
 
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/startTime"
+        android:focusable="false"
+        android:text="12:00"
+        android:inputType="time"
+        android:layout_below="@+id/startDate"
+        android:layout_alignParentRight="true"/>
 
-</LinearLayout>
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/endDate"
+        android:focusable="false"
+        android:text="mm/dd/yyyy"
+        android:inputType="date"
+        android:layout_below="@+id/startTime"
+        android:layout_alignParentRight="true"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/endTime"
+        android:focusable="false"
+        android:text="1:00"
+        android:inputType="time"
+        android:layout_below="@+id/endDate"
+        android:layout_alignParentRight="true"/>
+
+</RelativeLayout>

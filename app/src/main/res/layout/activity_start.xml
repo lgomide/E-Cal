@@ -21,7 +21,17 @@
         android:layout_height="wrap_content"
         android:text="Login with Google"
         android:id="@+id/button"
+        android:onClick="startGoogleActivity"
+        android:layout_below="@+id/OutlookLogIn"
+        android:layout_alignEnd="@+id/OutlookLogIn"
+        android:layout_marginTop="41dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Manual Entry"
+        android:id="@+id/manualEntryButton"
+        android:onClick="startManualEntry"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:onClick="startGoogleActivity" />
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

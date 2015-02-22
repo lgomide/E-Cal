@@ -31,12 +31,20 @@ public class CalendarEvent implements Parcelable{
         this.startHour_Of_Day = startHour_Of_Day;
     }
 
+    public void setStartHour_Of_Day(int startHour_of_day){
+        this.setStartHour_Of_Day(String.valueOf(startHour_of_day));
+    }
+
     public String getStartMinute() {
         return startMinute;
     }
 
     public void setStartMinute(String startMinute) {
         this.startMinute = startMinute;
+    }
+
+    public void setStartMinute(int startMinute) {
+        this.setStartMinute(String.valueOf(startMinute));
     }
 
     public String getStartDay() {
@@ -47,12 +55,20 @@ public class CalendarEvent implements Parcelable{
         this.startDay = startDay;
     }
 
+    public void setStartDay(int startDay) {
+        this.setStartDay(String.valueOf(startDay));
+    }
+
     public String getStartMonth() {
         return startMonth;
     }
 
     public void setStartMonth(String startMonth) {
         this.startMonth = startMonth;
+    }
+
+    public void setStartMonth(int startMonth) {
+        this.setStartMonth(String.valueOf(startMonth));
     }
 
     public String getStartYear() {
@@ -63,12 +79,20 @@ public class CalendarEvent implements Parcelable{
         this.startYear = startYear;
     }
 
+    public void setStartYear(int startYear) {
+        this.setStartYear(String.valueOf(startYear));
+    }
+
     public String getEndHour_Of_Day() {
         return endHour_Of_Day;
     }
 
     public void setEndHour_Of_Day(String endHour_Of_Day) {
         this.endHour_Of_Day = endHour_Of_Day;
+    }
+
+    public void setEndHour_Of_Day(int endHour_Of_Day) {
+        this.setEndHour_Of_Day(String.valueOf(endHour_Of_Day));
     }
 
     public String getEndMinute() {
@@ -79,12 +103,20 @@ public class CalendarEvent implements Parcelable{
         this.endMinute = endMinute;
     }
 
+    public void setEndMinute(int endMinute) {
+        this.setEndMinute(String.valueOf(endMinute));
+    }
+
     public String getEndDay() {
         return endDay;
     }
 
     public void setEndDay(String endDay) {
         this.endDay = endDay;
+    }
+
+    public void setEndDay(int endDay) {
+        this.setEndDay(String.valueOf(endDay));
     }
 
     public String getEndMonth() {
@@ -95,12 +127,20 @@ public class CalendarEvent implements Parcelable{
         this.endMonth = endMonth;
     }
 
+    public void setEndMonth(int endMonth){
+        this.setEndMonth(String.valueOf(endMonth));
+    }
+
     public String getEndYear() {
         return endYear;
     }
 
     public void setEndYear(String endYear) {
         this.endYear = endYear;
+    }
+
+    public void setEndYear(int endYear) {
+        this.setEndYear(String.valueOf(endYear));
     }
 
     public CalendarEvent(){
