@@ -39,7 +39,7 @@ public class StartActivity extends Activity {
         View startSettingsView = inflater.inflate(R.layout.fragment_manual_start_settings, null);
         final EditText deviceId = (EditText) startSettingsView.findViewById(R.id.manualDeviceId);
         final EditText userName = (EditText) startSettingsView.findViewById(R.id.manualUserName);
-        AlertDialog settingsDialog = new AlertDialog.Builder(StartActivity.this)
+        final AlertDialog settingsDialog = new AlertDialog.Builder(StartActivity.this)
                 .setTitle("Settings")
                 .setView(startSettingsView)
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
@@ -69,7 +69,7 @@ public class StartActivity extends Activity {
                         i.putExtra("userName", userNameString);
                         startActivity(i);
                     }
-                })
+                }).setCancelable(true)
                 .show();
     }
 

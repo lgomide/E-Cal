@@ -54,31 +54,25 @@
         android:layout_alignBottom="@+id/endTime"/>
 
     <EditText
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:id="@+id/eventName"
-        android:text="Event Name"
         android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:maxWidth="200dp" />
+        android:layout_alignParentRight="true" />
 
     <EditText
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:id="@+id/eventDescription"
-        android:text="Event Description"
         android:layout_below="@+id/eventName"
-        android:layout_alignParentRight="true"
-        android:maxWidth="200dp" />
+        android:layout_alignParentRight="true" />
 
     <EditText
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:id="@+id/eventLocation"
-        android:text="Event Location"
         android:layout_below="@+id/eventDescription"
-        android:layout_alignParentRight="true"
-        android:maxWidth="200dp" />
+        android:layout_alignParentRight="true" />
 
     <EditText
         android:layout_width="wrap_content"

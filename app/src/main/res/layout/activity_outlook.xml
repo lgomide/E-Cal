@@ -21,7 +21,7 @@
         android:inputType="date"
         android:ems="10"
         android:id="@+id/outlookStartDate"
-        android:layout_below="@+id/OutlookLogOut"
+        android:layout_below="@+id/outlookCalendarSettingsName"
         android:layout_alignParentEnd="true"
         android:focusable="false"
         android:text="mm/dd/yyyy"
@@ -68,10 +68,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Privacy Settings"
-        android:id="@+id/privacySettingsName"
+        android:text="Calendar Settings"
+        android:id="@+id/outlookCalendarSettingsName"
         android:textSize="30dp"
-        android:layout_below="@+id/outlookEndDate"
+        android:layout_below="@+id/OutlookLogOut"
         android:layout_centerHorizontal="true"
         android:paddingTop="15dp" />
 
@@ -81,7 +81,7 @@
         android:id="@+id/outlookEventName"
         android:paddingTop="20dp"
         android:textSize="20dp"
-        android:layout_below="@+id/privacySettingsName"
+        android:layout_below="@+id/outlookEndDate"
         android:layout_alignEnd="@+id/outlookEndDate"
         android:onClick="toggleOutlookEventName" />
 

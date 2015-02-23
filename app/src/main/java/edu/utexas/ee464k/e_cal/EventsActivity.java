@@ -28,6 +28,7 @@ import com.firebase.client.Firebase;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,6 +62,7 @@ public class EventsActivity extends Activity implements WeekView.MonthChangeList
         mWeekView.setMonthChangeListener(this);
         mWeekView.setEventLongPressListener(this);
         mWeekView.notifyDatasetChanged();
+        mWeekView.goToHour(Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
         numRun = 0;
     }
 
@@ -274,12 +276,14 @@ public class EventsActivity extends Activity implements WeekView.MonthChangeList
                                 event.setName(eventName.getText().toString());
                                 event.setDescription(eventDescription.getText().toString());
                                 event.setLocation(eventLocation.getText().toString());
+                                Events.add(event);
                                 mWeekView.notifyDatasetChanged();
                             }
                         })
                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+
                             }
                         }).create();
                 dialog.show();

@@ -3,10 +3,162 @@
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="edu.utexas.ee464k.e_cal.GoogleActivity">
+    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".GoogleActivity">
 
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Logout"
+        android:id="@+id/googleLogOut"
+        android:onClick="logoutGoogle"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="date"
+        android:ems="10"
+        android:id="@+id/googleStartDate"
+        android:layout_below="@+id/googleCalendarSettingsName"
+        android:layout_alignParentEnd="true"
+        android:focusable="false"
+        android:text="mm/dd/yyyy"
+        android:textAlignment="center" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="date"
+        android:ems="10"
+        android:id="@+id/googleEndDate"
+        android:focusable="false"
+        android:text="mm/dd/yyyy"
+        android:textAlignment="center"
+        android:layout_below="@+id/googleStartDate"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/googleUser"
+        android:layout_alignTop="@+id/googleLogOut"
+        android:textSize="20dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start Date:"
+        android:id="@+id/startDateNameGoogle"
+        android:textSize="24dp"
+        android:layout_above="@+id/googleEndDate"
+        android:layout_alignParentStart="false" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="End Date:"
+        android:id="@+id/endDateNameGoogle"
+        android:textSize="24dp"
+        android:layout_alignBottom="@+id/googleEndDate"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Calendar Settings"
+        android:id="@+id/googleCalendarSettingsName"
+        android:textSize="30dp"
+        android:layout_below="@+id/GoogleLogOut"
+        android:layout_centerHorizontal="true"
+        android:paddingTop="15dp" />
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/googleEventName"
+        android:paddingTop="20dp"
+        android:textSize="20dp"
+        android:layout_below="@+id/googleEndDate"
+        android:layout_alignEnd="@+id/googleEndDate"
+        android:onClick="toggleGoogleEventName" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Event Name"
+        android:id="@+id/eventNameFieldGoogle"
+        android:layout_alignBottom="@+id/googleEventName"
+        android:layout_alignParentStart="true"
+        android:textSize="24dp" />
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/googleEventLocation"
+        android:paddingTop="20dp"
+        android:textSize="20dp"
+        android:layout_below="@+id/googleEventName"
+        android:layout_alignParentEnd="true"
+        android:onClick="toggleGoogleEventLocation" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Event Location"
+        android:id="@+id/eventLocationFieldGoogle"
+        android:textSize="24dp"
+        android:layout_above="@+id/eventDescriptionGoogle"
+        android:layout_alignParentStart="true" />
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/eventDescriptionGoogle"
+        android:paddingTop="20dp"
+        android:textSize="20dp"
+        android:layout_below="@+id/googleEventLocation"
+        android:layout_alignParentEnd="true"
+        android:onClick="toggleGoogleEventDescription" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Event Description"
+        android:id="@+id/eventDescriptionFieldGoogle"
+        android:textSize="24dp"
+        android:layout_alignBottom="@+id/eventDescriptionGoogle"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Device Id"
+        android:id="@+id/deviceIdNameGoogle"
+        android:textSize="24dp"
+        android:layout_alignBottom="@+id/deviceIdGoogle"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/deviceIdGoogle"
+        android:layout_below="@+id/eventDescriptionFieldGoogle"
+        android:layout_alignEnd="@+id/eventDescriptionGoogle"
+        android:layout_alignStart="@+id/eventDescriptionGoogle"
+        android:paddingTop="40dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Get Calendar Data"
+        android:id="@+id/getCalendarDataButtonGoogle"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:onClick="getCalendarDataGoogle" />
 
 </RelativeLayout>
