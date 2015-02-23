@@ -308,7 +308,7 @@ public class EventsActivity extends Activity implements WeekView.MonthChangeList
                 endTime.set(Integer.parseInt(event.getEndYear()),Integer.parseInt(event.getEndMonth()) - 1,Integer.parseInt(event.getEndDay()),
                         Integer.parseInt(event.getEndHour_Of_Day()), Integer.parseInt(event.getEndMinute()));
                 WeekViewEvent weekViewEvent = new WeekViewEvent(i,event.getName(),startTime,endTime);
-                switch(i % 4){
+                switch(i % 6){
                     case 0:
                         weekViewEvent.setColor(getResources().getColor(R.color.event_color_01));
                         break;
@@ -321,6 +321,11 @@ public class EventsActivity extends Activity implements WeekView.MonthChangeList
                     case 3:
                         weekViewEvent.setColor(getResources().getColor(R.color.event_color_04));
                         break;
+                    case 4:
+                        weekViewEvent.setColor(getResources().getColor(R.color.event_color_05));
+                        break;
+                    case 5:
+                        weekViewEvent.setColor(getResources().getColor(R.color.event_color_06));
                 }
                 events.add(weekViewEvent);
             }

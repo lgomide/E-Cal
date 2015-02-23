@@ -4,4 +4,6 @@
     <color name="event_color_02">#f57f68</color>
     <color name="event_color_03">#87d288</color>
     <color name="event_color_04">#f8b552</color>
+    <color name="event_color_05">#ffe81abb</color>
+    <color name="event_color_06">#ff0010f2</color>
 </resources>
