@@ -82,6 +82,7 @@ public class EventsActivity extends Activity implements WeekView.MonthChangeList
             case R.id.action_upload_events:
                 Firebase deviceChild = myFirebaseRef.child(deviceId);
                 Firebase userChild = deviceChild.child(userName);
+                userChild.removeValue();
                 for(int i = 0; i < Events.size(); i++){
                     CalendarEvent event = Events.get(i);
                     Firebase eventChild = userChild.child(String.valueOf(i));
@@ -93,6 +94,7 @@ public class EventsActivity extends Activity implements WeekView.MonthChangeList
                     String endTime = event.getEndYear()+"-"+event.getEndMonth()+"-"+event.getEndDay()+"T"+event.getEndHour_Of_Day()+":"+event.getEndMinute();
                     eventChild.child("end_time").setValue(endTime);
                 }
+                Toast.makeText(EventsActivity.this,"Events have been uploaded", Toast.LENGTH_LONG).show();
                 return true;
             case R.id.action_day_view:
                 if (mWeekViewType != TYPE_DAY_VIEW) {

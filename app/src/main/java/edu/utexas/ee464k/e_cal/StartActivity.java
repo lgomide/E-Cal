@@ -69,7 +69,12 @@ public class StartActivity extends Activity {
                         i.putExtra("userName", userNameString);
                         startActivity(i);
                     }
-                }).setCancelable(true)
+                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
                 .show();
     }
 

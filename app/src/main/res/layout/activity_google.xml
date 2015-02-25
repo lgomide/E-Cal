@@ -71,7 +71,7 @@
         android:text="Calendar Settings"
         android:id="@+id/googleCalendarSettingsName"
         android:textSize="30dp"
-        android:layout_below="@+id/GoogleLogOut"
+        android:layout_below="@+id/googleLogOut"
         android:layout_centerHorizontal="true"
         android:paddingTop="15dp" />
 

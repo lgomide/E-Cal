@@ -1,13 +1,16 @@
 package edu.utexas.ee464k.e_cal;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.CalendarContract;
+import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -43,7 +46,7 @@ public class GoogleActivity extends Activity {
     private boolean eventDescription;
     private ArrayList<CalendarEvent> Events = new ArrayList<CalendarEvent>();
     private String deviceId;
-    private String userName;
+    private TextView userName;
     private EditText startDateField;
     private EditText endDateField;
     private Calendar startCalendar;
@@ -62,6 +65,7 @@ public class GoogleActivity extends Activity {
         endDateField = (EditText) findViewById(R.id.googleEndDate);
         startCalendar = Calendar.getInstance();
         endCalendar = Calendar.getInstance();
+        userName = (TextView) findViewById(R.id.googleUser);
         updateEndField();
         updateStartField();
         final DatePickerDialog.OnDateSetListener startDate = new DatePickerDialog.OnDateSetListener() {
@@ -96,6 +100,35 @@ public class GoogleActivity extends Activity {
                         endCalendar.get(Calendar.MONTH), endCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
+        String[] projection = new String[] {ContactsContract.Profile.DISPLAY_NAME};
+        Uri dataUri = Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI, ContactsContract.Contacts.Data.CONTENT_DIRECTORY);
+        Cursor c = getContentResolver().query(dataUri, projection, null, null, null);
+        try{
+            if(c.moveToFirst()){
+                userName.setText(c.getString(c.getColumnIndex(ContactsContract.Profile.DISPLAY_NAME)));
+            } else{
+                final EditText input = new EditText(this);
+                new AlertDialog.Builder(GoogleActivity.this)
+                        .setTitle("User Name")
+                        .setMessage("Please enter user name: ")
+                        .setView(input)
+                        .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                userName.setText(input.getText().toString());
+                            }
+                        })
+                        .setNegativeButton("Quit", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                finish();
+                            }
+                        })
+                        .show();
+            }
+        }finally {
+            c.close();
+        }
     }
 
     private void updateStartField(){
@@ -151,36 +184,43 @@ public class GoogleActivity extends Activity {
         Cursor cursor = CalendarContract.Instances.query(cr,
                 new String[] {"title", "description", "dtstart", "dtend", "eventLocation", "availability"},
                 startCalendar.getTimeInMillis(),endCalendar.getTimeInMillis());
-        cursor.moveToFirst();
-        for(int i = 0; i < cursor.getCount(); i++){
-            if(cursor.getInt(5) == CalendarContract.Events.AVAILABILITY_BUSY){
-                CalendarEvent event = new CalendarEvent();
-                event.setName(cursor.getString(0));
-                event.setDescription(cursor.getString(1));
-                Calendar cal = Calendar.getInstance();
-                cal.setTimeInMillis(Long.parseLong(cursor.getString(2)));
-                event.setStartHour_Of_Day(cal.get(Calendar.HOUR_OF_DAY));
-                event.setStartMinute(cal.get(Calendar.MINUTE));
-                event.setStartYear(cal.get(Calendar.YEAR));
-                event.setStartMonth(cal.get(Calendar.MONTH)+1);
-                event.setStartDay(cal.get(Calendar.DAY_OF_MONTH));
-                cal.setTimeInMillis(Long.parseLong(cursor.getString(3)));
-                event.setEndHour_Of_Day(cal.get(Calendar.HOUR_OF_DAY));
-                event.setEndMinute(cal.get(Calendar.MINUTE));
-                event.setEndYear(cal.get(Calendar.YEAR));
-                event.setEndMonth(cal.get(Calendar.MONTH)+1);
-                event.setEndDay(cal.get(Calendar.DAY_OF_MONTH));
-                event.setLocation(cursor.getString(4));
-                Events.add(event);
+        try{
+            if(cursor.moveToFirst()){
+                for(int i = 0; i < cursor.getCount(); i++){
+                    if(cursor.getInt(5) == CalendarContract.Events.AVAILABILITY_BUSY){
+                        CalendarEvent event = new CalendarEvent();
+                        event.setName(cursor.getString(0));
+                        event.setDescription(cursor.getString(1));
+                        Calendar cal = Calendar.getInstance();
+                        cal.setTimeInMillis(Long.parseLong(cursor.getString(2)));
+                        event.setStartHour_Of_Day(cal.get(Calendar.HOUR_OF_DAY));
+                        event.setStartMinute(cal.get(Calendar.MINUTE));
+                        event.setStartYear(cal.get(Calendar.YEAR));
+                        event.setStartMonth(cal.get(Calendar.MONTH)+1);
+                        event.setStartDay(cal.get(Calendar.DAY_OF_MONTH));
+                        cal.setTimeInMillis(Long.parseLong(cursor.getString(3)));
+                        event.setEndHour_Of_Day(cal.get(Calendar.HOUR_OF_DAY));
+                        event.setEndMinute(cal.get(Calendar.MINUTE));
+                        event.setEndYear(cal.get(Calendar.YEAR));
+                        event.setEndMonth(cal.get(Calendar.MONTH)+1);
+                        event.setEndDay(cal.get(Calendar.DAY_OF_MONTH));
+                        event.setLocation(cursor.getString(4));
+                        Events.add(event);
+                    }
+                    cursor.moveToNext();
+                }
             }
-            cursor.moveToNext();
+
+        }
+        finally{
+            cursor.close();
         }
         Intent i = new Intent(GoogleActivity.this,EventsActivity.class);
         Bundle data = new Bundle();
         data.putParcelableArrayList("events", Events);
         i.putExtra("data", data);
         i.putExtra("deviceId",deviceId);
-        i.putExtra("userName", userName);
+        i.putExtra("userName", userName.getText().toString());
         startActivity(i);
     }
 
