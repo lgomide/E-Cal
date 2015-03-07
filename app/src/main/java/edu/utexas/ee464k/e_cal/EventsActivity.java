@@ -5,8 +5,14 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.app.TimePickerDialog;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -26,12 +32,17 @@ import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEvent;
 import com.firebase.client.Firebase;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 
 public class EventsActivity extends Activity implements WeekView.MonthChangeListener, WeekView.EventClickListener, WeekView.EventLongPressListener{
@@ -45,6 +56,8 @@ public class EventsActivity extends Activity implements WeekView.MonthChangeList
     private String userName;
     private String deviceId;
     private int numRun;
+    private BluetoothAdapter  mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+    private final String deviceName = "RNBT-5980"; //00:06:66:6B:59:80
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,14 +70,21 @@ public class EventsActivity extends Activity implements WeekView.MonthChangeList
         deviceId = i.getStringExtra("deviceId");
         Bundle data = i.getBundleExtra("data");
         Events = data.getParcelableArrayList("events");
+        Collections.sort(Events);
         mWeekView = (WeekView) findViewById(R.id.weekView);
         mWeekView.setOnEventClickListener(this);
         mWeekView.setMonthChangeListener(this);
         mWeekView.setEventLongPressListener(this);
         mWeekView.notifyDatasetChanged();
-        mWeekView.goToHour(Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
+        if(Events.size() > 0){
+            mWeekView.goToDate(Events.get(0).getStartCalendar());
+            //mWeekView.goToHour(Events.get(0).getStartCalendar().get(Calendar.HOUR_OF_DAY));
+        }else{
+            mWeekView.goToHour(Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
+        }
         numRun = 0;
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -80,21 +100,83 @@ public class EventsActivity extends Activity implements WeekView.MonthChangeList
                 mWeekView.goToToday();
                 return true;
             case R.id.action_upload_events:
-                Firebase deviceChild = myFirebaseRef.child(deviceId);
-                Firebase userChild = deviceChild.child(userName);
-                userChild.removeValue();
-                for(int i = 0; i < Events.size(); i++){
-                    CalendarEvent event = Events.get(i);
-                    Firebase eventChild = userChild.child(String.valueOf(i));
-                    eventChild.child("name").setValue(event.getName());
-                    eventChild.child("location").setValue(event.getLocation());
-                    eventChild.child("description").setValue(event.getDescription());
-                    String startTime = event.getStartYear()+"-"+event.getStartMonth()+"-"+event.getStartDay()+"T"+event.getStartHour_Of_Day()+":"+event.getStartMinute();
-                    eventChild.child("start_time").setValue(startTime);
-                    String endTime = event.getEndYear()+"-"+event.getEndMonth()+"-"+event.getEndDay()+"T"+event.getEndHour_Of_Day()+":"+event.getEndMinute();
-                    eventChild.child("end_time").setValue(endTime);
-                }
-                Toast.makeText(EventsActivity.this,"Events have been uploaded", Toast.LENGTH_LONG).show();
+                new AlertDialog.Builder(EventsActivity.this)
+                        .setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .setNeutralButton("Bluetooth",new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if(mBluetoothAdapter == null){
+                                    //device does not support bluetooth
+                                    Toast.makeText(EventsActivity.this,"This device does not support Bluetooth",Toast.LENGTH_LONG).show();
+                                    return;
+                                }
+                                if (!mBluetoothAdapter.isEnabled()) {
+                                    Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                                    startActivityForResult(enableBtIntent, 1);
+                                }
+                                while(!mBluetoothAdapter.isEnabled()){
+                                }
+                                Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
+                                boolean deviceFound = false;
+                                BluetoothDevice device = null;
+                                for(BluetoothDevice mDevice : pairedDevices){
+                                    String mDeviceName = mDevice.getName();
+                                    if(mDevice.getName().equals(deviceName)){
+                                        deviceFound = true;
+                                        device = mDevice;
+                                    }
+                                }
+                                if(!deviceFound){
+                                    Toast.makeText(EventsActivity.this, "E-Cal is not paired, please pair E-Cal device", Toast.LENGTH_LONG).show();
+                                    return;
+                                }
+                                BluetoothSocket socket = null;
+                                mBluetoothAdapter.cancelDiscovery();
+                                byte[] bytes = getEventsByteArray();
+
+                                try{
+                                    socket = device.createRfcommSocketToServiceRecord(UUID.fromString(MyConstants.MY_UUID));
+                                    socket.connect();
+                                    OutputStream mOutStream = socket.getOutputStream();
+                                    mOutStream.write(bytes);
+
+                                } catch(IOException connectException ){
+                                    try {
+                                        socket.close();
+                                    } catch(IOException closeException){
+
+                                    }
+                                }
+                            }
+                        })
+                        .setPositiveButton("WiFi", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Firebase deviceChild = myFirebaseRef.child(deviceId);
+                                Firebase userChild = deviceChild.child(userName);
+                                userChild.removeValue();
+                                for(int i = 0; i < Events.size(); i++){
+                                    CalendarEvent event = Events.get(i);
+                                    Firebase eventChild = userChild.child(String.valueOf(i));
+                                    eventChild.child("name").setValue(event.getName());
+                                    eventChild.child("location").setValue(event.getLocation());
+                                    eventChild.child("description").setValue(event.getDescription());
+                                    String startTime = event.getStartYear()+"-"+event.getStartMonth()+"-"+event.getStartDay()+"T"+event.getStartHour_Of_Day()+":"+event.getStartMinute();
+                                    eventChild.child("start_time").setValue(startTime);
+                                    String endTime = event.getEndYear()+"-"+event.getEndMonth()+"-"+event.getEndDay()+"T"+event.getEndHour_Of_Day()+":"+event.getEndMinute();
+                                    eventChild.child("end_time").setValue(endTime);
+                                }
+                                Toast.makeText(EventsActivity.this,"Events have been uploaded", Toast.LENGTH_LONG).show();
+                            }
+                        })
+                        .setMessage("Please select connection method to E-Cal device:")
+                        .setTitle("Upload Events")
+                        .show();
                 return true;
             case R.id.action_day_view:
                 if (mWeekViewType != TYPE_DAY_VIEW) {
@@ -280,6 +362,7 @@ public class EventsActivity extends Activity implements WeekView.MonthChangeList
                                 event.setLocation(eventLocation.getText().toString());
                                 Events.add(event);
                                 mWeekView.notifyDatasetChanged();
+                                mWeekView.goToDate(event.getStartCalendar());
                             }
                         })
                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -492,6 +575,41 @@ public class EventsActivity extends Activity implements WeekView.MonthChangeList
     @Override
     public void onEventLongPress(WeekViewEvent event, RectF eventRect) {
 
+    }
+
+    private byte[] getEventsByteArray(){
+        String bytesString = "<P>["+Events.size()+"]"+userName;
+        for(CalendarEvent Event : Events){
+            Calendar startTime = Calendar.getInstance();
+            startTime.set(Calendar.YEAR,Integer.parseInt(Event.getStartYear()));
+            startTime.set(Calendar.MONTH,Integer.parseInt(Event.getStartMonth()) - 1);
+            startTime.set(Calendar.DAY_OF_MONTH,Integer.parseInt(Event.getStartDay()));
+            int startDayOfWeek = startTime.get(Calendar.DAY_OF_WEEK);
+            String startDate = Event.getStartYear()+"-"+Event.getStartMonth()+"-"+Event.getStartDay()+
+                    ","+startDayOfWeek+":"+Event.getStartHour_Of_Day()+"-"+Event.getStartMinute();
+            bytesString += "<E>[]<ST>["+startDate.length()+"]"+startDate+"</ST>";
+            Calendar endTime = Calendar.getInstance();
+            endTime.set(Calendar.YEAR,Integer.parseInt(Event.getEndYear()));
+            endTime.set(Calendar.MONTH,Integer.parseInt(Event.getEndMonth()) - 1);
+            endTime.set(Calendar.DAY_OF_MONTH,Integer.parseInt(Event.getEndDay()));
+            int endDayOfWeek = endTime.get(Calendar.DAY_OF_WEEK);
+            String endDate = Event.getEndYear()+"-"+Event.getEndMonth()+"-"+Event.getEndDay()+
+                    ","+endDayOfWeek+":"+Event.getEndHour_Of_Day()+"-"+Event.getEndMinute();
+            bytesString += "<ET>["+endDate.length()+"]"+endDate+"</ET>";
+            if(!Event.getName().equals("")){
+                bytesString += "<N>[" + Event.getName().length() + "]" + Event.getName() + "</N>";
+            }
+            if(!Event.getLocation().equals("")){
+                bytesString += "<L>[" + Event.getLocation().length() + "]" + Event.getLocation() + "</L>";
+            }
+            if(!Event.getDescription().equals("")){
+                bytesString += "<D>[" + Event.getDescription().length() + "]" + Event.getDescription() + "</D>";
+            }
+            bytesString += "</E>";
+        }
+        bytesString += "</P>";
+
+        return bytesString.getBytes();
     }
 
 }

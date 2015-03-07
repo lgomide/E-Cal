@@ -8,7 +8,7 @@ import java.util.Calendar;
 /**
  * Created by Leo on 2/16/2015.
  */
-public class CalendarEvent implements Parcelable{
+public class CalendarEvent implements Parcelable, Comparable<CalendarEvent>{
     private String Name;
     private String Location;
     private String Description;
@@ -22,6 +22,23 @@ public class CalendarEvent implements Parcelable{
     private String endDay;
     private String endMonth;
     private String endYear;
+
+    @Override
+    public int compareTo(CalendarEvent other){
+        Calendar c1 = this.getStartCalendar();
+        Calendar c2 = this.getStartCalendar();
+        return c1.compareTo(c2);
+    }
+
+    public Calendar getStartCalendar(){
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR,Integer.parseInt(startYear));
+        cal.set(Calendar.MONTH,Integer.parseInt(startMonth) - 1);
+        cal.set(Calendar.DAY_OF_MONTH,Integer.parseInt(startDay));
+        cal.set(Calendar.HOUR_OF_DAY,Integer.parseInt(startHour_Of_Day));
+        cal.set(Calendar.MINUTE,Integer.parseInt(startMinute));
+        return cal;
+    }
 
     public String getStartHour_Of_Day() {
         return startHour_Of_Day;
@@ -144,6 +161,19 @@ public class CalendarEvent implements Parcelable{
     }
 
     public CalendarEvent(){
+        Name = "";
+        Location = "";
+        Description = "";
+        startHour_Of_Day = "";
+        startMinute = "";
+        startDay = "";
+        startMonth = "";
+        startYear = "";
+        endHour_Of_Day = "";
+        endMinute = "";
+        endDay = "";
+        endMonth = "";
+        endYear = "";
 
     }
 

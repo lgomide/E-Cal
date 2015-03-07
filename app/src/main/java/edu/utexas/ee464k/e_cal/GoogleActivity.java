@@ -11,30 +11,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.provider.ContactsContract;
+import android.text.format.Time;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.microsoft.live.LiveAuthException;
-import com.microsoft.live.LiveAuthListener;
-import com.microsoft.live.LiveAuthClient;
-import com.microsoft.live.LiveConnectSession;
-import com.microsoft.live.LiveConnectClient;
-import com.microsoft.live.LiveOperation;
-import com.microsoft.live.LiveOperationException;
-import com.microsoft.live.LiveOperationListener;
-import com.microsoft.live.LiveStatus;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -182,7 +167,10 @@ public class GoogleActivity extends Activity {
         endCalendar.set(Calendar.MINUTE,59);
         ContentResolver cr = v.getContext().getContentResolver();
         Cursor cursor = CalendarContract.Instances.query(cr,
-                new String[] {"title", "description", "dtstart", "dtend", "eventLocation", "availability"},
+                new String[] {CalendarContract.Events.TITLE,CalendarContract.Events.DESCRIPTION,
+                        CalendarContract.Instances.BEGIN, CalendarContract.Instances.END, CalendarContract.Events.EVENT_LOCATION,
+                        CalendarContract.Events.AVAILABILITY, CalendarContract.Events.DURATION,CalendarContract.Events.EXDATE,
+                        CalendarContract.Events.RRULE},
                 startCalendar.getTimeInMillis(),endCalendar.getTimeInMillis());
         try{
             if(cursor.moveToFirst()){
