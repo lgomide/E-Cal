@@ -45,7 +45,11 @@ public class CalendarEvent implements Parcelable, Comparable<CalendarEvent>{
     }
 
     public void setStartHour_Of_Day(String startHour_Of_Day) {
-        this.startHour_Of_Day = startHour_Of_Day;
+        if(Integer.parseInt(startHour_Of_Day) / 10 == 0){
+            this.startHour_Of_Day = "0" + startHour_Of_Day;
+        }else{
+            this.startHour_Of_Day = startHour_Of_Day;
+        }
     }
 
     public void setStartHour_Of_Day(int startHour_of_day){
@@ -57,7 +61,11 @@ public class CalendarEvent implements Parcelable, Comparable<CalendarEvent>{
     }
 
     public void setStartMinute(String startMinute) {
-        this.startMinute = startMinute;
+        if(Integer.parseInt(startMinute) / 10 == 0){
+            this.startMinute = "0" + startMinute;
+        } else{
+            this.startMinute = startMinute;
+        }
     }
 
     public void setStartMinute(int startMinute) {
@@ -69,7 +77,11 @@ public class CalendarEvent implements Parcelable, Comparable<CalendarEvent>{
     }
 
     public void setStartDay(String startDay) {
-        this.startDay = startDay;
+        if(Integer.parseInt(startDay) / 10 == 0){
+            this.startDay = "0" + startDay;
+        }else{
+            this.startDay = startDay;
+        }
     }
 
     public void setStartDay(int startDay) {
@@ -81,7 +93,11 @@ public class CalendarEvent implements Parcelable, Comparable<CalendarEvent>{
     }
 
     public void setStartMonth(String startMonth) {
-        this.startMonth = startMonth;
+        if(Integer.parseInt(startMonth)/10==0){
+            this.startMonth = "0" + startMonth;
+        }else{
+            this.startMonth = startMonth;
+        }
     }
 
     public void setStartMonth(int startMonth) {
@@ -105,7 +121,11 @@ public class CalendarEvent implements Parcelable, Comparable<CalendarEvent>{
     }
 
     public void setEndHour_Of_Day(String endHour_Of_Day) {
-        this.endHour_Of_Day = endHour_Of_Day;
+        if(Integer.parseInt(endHour_Of_Day) / 10 == 0){
+            this.endHour_Of_Day = "0" + endHour_Of_Day;
+        } else{
+            this.endHour_Of_Day = endHour_Of_Day;
+        }
     }
 
     public void setEndHour_Of_Day(int endHour_Of_Day) {
@@ -117,7 +137,11 @@ public class CalendarEvent implements Parcelable, Comparable<CalendarEvent>{
     }
 
     public void setEndMinute(String endMinute) {
-        this.endMinute = endMinute;
+        if(Integer.parseInt(endMinute) / 10 == 0){
+            this.endMinute = "0" + endMinute;
+        } else{
+            this.endMinute = endMinute;
+        }
     }
 
     public void setEndMinute(int endMinute) {
@@ -129,7 +153,11 @@ public class CalendarEvent implements Parcelable, Comparable<CalendarEvent>{
     }
 
     public void setEndDay(String endDay) {
-        this.endDay = endDay;
+        if(Integer.parseInt(endDay) / 10 == 0){
+            this.endDay = "0" + endDay;
+        } else{
+            this.endDay = endDay;
+        }
     }
 
     public void setEndDay(int endDay) {
@@ -141,7 +169,11 @@ public class CalendarEvent implements Parcelable, Comparable<CalendarEvent>{
     }
 
     public void setEndMonth(String endMonth) {
-        this.endMonth = endMonth;
+        if(Integer.parseInt(endMonth) / 10 == 0){
+            this.endMonth = "0" + endMonth;
+        } else{
+            this.endMonth = endMonth;
+        }
     }
 
     public void setEndMonth(int endMonth){
