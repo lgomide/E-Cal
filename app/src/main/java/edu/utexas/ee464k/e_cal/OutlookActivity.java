@@ -162,18 +162,6 @@ public class OutlookActivity extends Activity implements LiveAuthListener {
     }
 
     public void getCalendarDataOutlook(View v){
-        EditText deviceIdBox = (EditText) findViewById(R.id.deviceIdOutlook);
-        String deviceIdString = deviceIdBox.getText().toString();
-        if(deviceIdString.equals("")){
-            Toast.makeText(this,"Must enter Device id",Toast.LENGTH_LONG).show();
-            return;
-        }
-        int deviceIdInt = Integer.parseInt(deviceIdBox.getText().toString());
-        if(deviceIdInt != 1){
-            Toast.makeText(this,"Incorrect device Id",Toast.LENGTH_LONG).show();
-            return;
-        }
-        deviceId = String.valueOf(deviceIdInt);
         if(startCalendar.after(endCalendar)){
             Toast.makeText(this,"Start Date is after End Date", Toast.LENGTH_LONG).show();
             return;
@@ -219,35 +207,78 @@ public class OutlookActivity extends Activity implements LiveAuthListener {
                         JSONObject jsonEvent = events.getJSONObject(i);
                         if(jsonEvent.getString("availability").equals("busy")) {
                             CalendarEvent event = new CalendarEvent();
-                            String endTime = jsonEvent.getString("end_time");
-                            String[] splits = endTime.split("-");
-                            event.setEndYear(splits[0]);
-                            event.setEndMonth(splits[1]);
-                            splits = splits[2].split("T");
-                            event.setEndDay(splits[0]);
-                            splits = splits[1].split(":");
-                            event.setEndHour_Of_Day(splits[0]);
-                            event.setEndMinute(splits[1]);
-                            //event.setEndTime(jsonEvent.getString("end_time"));//2015-02-16T13:30:00
-                            String startTime = jsonEvent.getString("start_time");
-                            splits = startTime.split("-");
-                            event.setStartYear(splits[0]);
-                            event.setStartMonth(splits[1]);
-                            splits = splits[2].split("T");
-                            event.setStartDay(splits[0]);
-                            splits = splits[1].split(":");
-                            event.setStartHour_Of_Day(splits[0]);
-                            event.setStartMinute(splits[1]);
-                            //event.setStartTime(jsonEvent.getString("start_time"));
+                            String eventNameString;
+                            String eventLocationString;
+                            String eventDescriptionString;
                             if (eventName) {
-                                event.setName(jsonEvent.getString("name"));
+                                eventNameString = jsonEvent.getString("name");
+                            } else{
+                                eventNameString = "";
                             }
                             if (eventLocation) {
-                                event.setLocation(jsonEvent.getString("location"));
+                                eventLocationString = jsonEvent.getString("location");
+                            } else{
+                                eventLocationString = "";
                             }
                             if (eventDescription) {
-                                event.setDescription(jsonEvent.getString("description"));
+                                eventDescriptionString = jsonEvent.getString("description");
+                            } else {
+                                eventDescriptionString = "";
                             }
+                            String endTime = jsonEvent.getString("end_time");
+                            String[] splits = endTime.split("-");
+                            Calendar endCal = Calendar.getInstance();
+                            endCal.set(Calendar.YEAR,Integer.parseInt(splits[0]));
+                            endCal.set(Calendar.MONTH,Integer.parseInt(splits[1]));
+                            splits = splits[2].split("T");
+                            endCal.set(Calendar.DAY_OF_MONTH,Integer.parseInt(splits[0]));
+                            splits = splits[1].split(":");
+                            endCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(splits[0]));
+                            endCal.set(Calendar.MINUTE, Integer.parseInt(splits[1]));
+                            String startTime = jsonEvent.getString("start_time");
+                            splits = startTime.split("-");
+                            Calendar startCal = Calendar.getInstance();
+                            startCal.set(Calendar.YEAR,Integer.parseInt(splits[0]));
+                            startCal.set(Calendar.MONTH, Integer.parseInt(splits[1]));
+                            splits = splits[2].split("T");
+                            startCal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(splits[0]));
+                            splits = splits[1].split(":");
+                            startCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(splits[0]));
+                            startCal.set(Calendar.MINUTE, Integer.parseInt(splits[1]));
+                            while(startCal.get(Calendar.MONTH)!=endCal.get(Calendar.MONTH) || startCal.get(Calendar.DAY_OF_MONTH) != endCal.get(Calendar.DAY_OF_MONTH)){
+                                CalendarEvent newEvent = new CalendarEvent();
+                                newEvent.setName(eventNameString);
+                                newEvent.setDescription(eventDescriptionString);
+                                newEvent.setLocation(eventLocationString);
+                                newEvent.setStartHour_Of_Day(startCal.get(Calendar.HOUR_OF_DAY));
+                                newEvent.setStartMinute(startCal.get(Calendar.MINUTE));
+                                newEvent.setStartYear(startCal.get(Calendar.YEAR));
+                                newEvent.setStartMonth(startCal.get(Calendar.MONTH)+1);
+                                newEvent.setStartDay(startCal.get(Calendar.DAY_OF_MONTH));
+                                newEvent.setEndHour_Of_Day(23);
+                                newEvent.setEndMinute(59);
+                                newEvent.setEndYear(startCal.get(Calendar.YEAR));
+                                newEvent.setEndMonth(startCal.get(Calendar.MONTH)+1);
+                                newEvent.setEndDay(startCal.get(Calendar.DAY_OF_MONTH));
+                                startCal.add(Calendar.DAY_OF_MONTH,1);
+                                startCal.set(Calendar.HOUR_OF_DAY,0);
+                                startCal.set(Calendar.MINUTE, 0);
+                                Events.add(newEvent);
+                            }
+                            event.setStartHour_Of_Day(startCal.get(Calendar.HOUR_OF_DAY));
+                            event.setStartMinute(startCal.get(Calendar.MINUTE));
+                            event.setStartYear(startCal.get(Calendar.YEAR));
+                            event.setStartMonth(startCal.get(Calendar.MONTH)+1);
+                            event.setStartDay(startCal.get(Calendar.DAY_OF_MONTH));
+                            event.setEndHour_Of_Day(endCal.get(Calendar.HOUR_OF_DAY));
+                            event.setEndMinute(endCal.get(Calendar.MINUTE));
+                            event.setEndYear(endCal.get(Calendar.YEAR));
+                            event.setEndMonth(endCal.get(Calendar.MONTH)+1);
+                            event.setEndDay(endCal.get(Calendar.DAY_OF_MONTH));
+                            event.setLocation(eventLocationString);
+                            event.setDescription(eventDescriptionString);
+                            event.setName(eventNameString);
+                            Events.add(event);
                             Events.add(event);
                         }
                     }

@@ -6,4 +6,7 @@
     <color name="event_color_04">#f8b552</color>
     <color name="event_color_05">#ffe81abb</color>
     <color name="event_color_06">#ff0010f2</color>
+    <color name="action_bar_color">#ffd777</color>
+    <color name="background_color">#f2f2f2</color>
+    <color name="text_color">#989898</color>
 </resources>

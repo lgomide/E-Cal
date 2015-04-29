@@ -1,37 +1,72 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="edu.utexas.ee464k.e_cal.StartActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="edu.utexas.ee464k.e_cal.StartActivity"
+    android:background="@color/background_color">
 
-    <Button
+    <RelativeLayout
+        android:id="@+id/googleActionBar"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/abc_action_bar_default_height"
+        android:background="@color/action_bar_color"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/googleEcal"
+            android:text="ECAL"
+            android:textStyle="bold"
+            android:textColor="#ffffffff"
+            android:textSize="26dp"
+            android:paddingTop="10dp"
+            android:paddingLeft="10dp" />
+
+    </RelativeLayout>
+
+    <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Login with Outlook"
         android:id="@+id/OutlookLogIn"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="56dp"
-        android:onClick="startOutlookActivity" />
+        android:onClick="startOutlookActivity"
+        android:src="@drawable/outlookloginimage"
+        android:background="#000010f2"
+        android:layout_below="@+id/introText"
+        android:paddingTop="30dp"
+        android:layout_centerHorizontal="true" />
 
-    <Button
+    <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Login with Google"
-        android:id="@+id/button"
+        android:id="@+id/googleLogInButton"
         android:onClick="startGoogleActivity"
         android:layout_below="@+id/OutlookLogIn"
-        android:layout_alignEnd="@+id/OutlookLogIn"
-        android:layout_marginTop="41dp" />
+        android:paddingTop="30dp"
+        android:background="#000010f2"
+        android:paddingBottom="30dp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/googleloginimage" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Manual Entry"
+        android:textSize="30dp"
         android:id="@+id/manualEntryButton"
         android:onClick="startManualEntry"
-        android:layout_centerVertical="true"
+        android:layout_below="@+id/googleLogInButton"
         android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="\t\t\t\t\tWelcome to ECAL\nPlease select calendar service"
+        android:id="@+id/introText"
+        android:paddingTop="20dp"
+        android:layout_below="@+id/googleActionBar"
+        android:textColor="@color/text_color"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

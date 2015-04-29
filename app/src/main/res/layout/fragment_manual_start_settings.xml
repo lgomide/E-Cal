@@ -17,18 +17,4 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Device Id: "
-        android:id="@+id/manualDeviceIdLabel"
-        android:layout_alignBottom="@+id/manualDeviceId"/>
-
-    <EditText
-        android:layout_width="70dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/manualDeviceId"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/manualUserName"
-        android:inputType="number"/>
 </RelativeLayout>

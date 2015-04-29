@@ -40,6 +40,16 @@ public class CalendarEvent implements Parcelable, Comparable<CalendarEvent>{
         return cal;
     }
 
+    public Calendar getEndCalendar(){
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR,Integer.parseInt(endYear));
+        cal.set(Calendar.MONTH,Integer.parseInt(endMonth) - 1);
+        cal.set(Calendar.DAY_OF_MONTH,Integer.parseInt(endDay));
+        cal.set(Calendar.HOUR_OF_DAY,Integer.parseInt(endHour_Of_Day));
+        cal.set(Calendar.MINUTE,Integer.parseInt(endMinute));
+        return cal;
+    }
+
     public String getStartHour_Of_Day() {
         return startHour_Of_Day;
     }

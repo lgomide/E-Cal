@@ -147,18 +147,6 @@ public class GoogleActivity extends Activity {
     }
 
     public void getCalendarDataGoogle(View v){
-        EditText deviceIdBox = (EditText) findViewById(R.id.deviceIdGoogle);
-        String deviceIdString = deviceIdBox.getText().toString();
-        if(deviceIdString.equals("")){
-            Toast.makeText(this,"Must enter Device id",Toast.LENGTH_LONG).show();
-            return;
-        }
-        int deviceIdInt = Integer.parseInt(deviceIdBox.getText().toString());
-        if(deviceIdInt != 1){
-            Toast.makeText(this,"Incorrect device Id",Toast.LENGTH_LONG).show();
-            return;
-        }
-        deviceId = String.valueOf(deviceIdInt);
         if(startCalendar.after(endCalendar)){
             Toast.makeText(this,"Start Date is after End Date", Toast.LENGTH_LONG).show();
             return;
@@ -177,22 +165,61 @@ public class GoogleActivity extends Activity {
                 for(int i = 0; i < cursor.getCount(); i++){
                     if(cursor.getInt(5) == CalendarContract.Events.AVAILABILITY_BUSY){
                         CalendarEvent event = new CalendarEvent();
-                        event.setName(cursor.getString(0));
-                        event.setDescription(cursor.getString(1));
-                        Calendar cal = Calendar.getInstance();
-                        cal.setTimeInMillis(Long.parseLong(cursor.getString(2)));
-                        event.setStartHour_Of_Day(cal.get(Calendar.HOUR_OF_DAY));
-                        event.setStartMinute(cal.get(Calendar.MINUTE));
-                        event.setStartYear(cal.get(Calendar.YEAR));
-                        event.setStartMonth(cal.get(Calendar.MONTH)+1);
-                        event.setStartDay(cal.get(Calendar.DAY_OF_MONTH));
-                        cal.setTimeInMillis(Long.parseLong(cursor.getString(3)));
-                        event.setEndHour_Of_Day(cal.get(Calendar.HOUR_OF_DAY));
-                        event.setEndMinute(cal.get(Calendar.MINUTE));
-                        event.setEndYear(cal.get(Calendar.YEAR));
-                        event.setEndMonth(cal.get(Calendar.MONTH)+1);
-                        event.setEndDay(cal.get(Calendar.DAY_OF_MONTH));
-                        event.setLocation(cursor.getString(4));
+                        String eventNameString;
+                        String eventLocationString;
+                        String eventDescriptionString;
+                        if (eventName) {
+                            eventNameString = cursor.getString(0);
+                        } else{
+                            eventNameString = "";
+                        }
+                        if (eventLocation) {
+                            eventLocationString = cursor.getString(4);
+                        } else{
+                            eventLocationString = "";
+                        }
+                        if (eventDescription) {
+                            eventDescriptionString = cursor.getString(1);
+                        } else {
+                            eventDescriptionString = "";
+                        }
+                        event.setName(eventNameString);
+                        event.setDescription(eventDescriptionString);
+                        Calendar startCal = Calendar.getInstance();
+                        startCal.setTimeInMillis(Long.parseLong(cursor.getString(2)));
+                        Calendar endCal = Calendar.getInstance();
+                        endCal.setTimeInMillis(Long.parseLong(cursor.getString(3)));
+                        while(startCal.get(Calendar.MONTH)!=endCal.get(Calendar.MONTH) || startCal.get(Calendar.DAY_OF_MONTH) != endCal.get(Calendar.DAY_OF_MONTH)){
+                            CalendarEvent newEvent = new CalendarEvent();
+                            newEvent.setName(eventNameString);
+                            newEvent.setDescription(eventDescriptionString);
+                            newEvent.setLocation(eventLocationString);
+                            newEvent.setStartHour_Of_Day(startCal.get(Calendar.HOUR_OF_DAY));
+                            newEvent.setStartMinute(startCal.get(Calendar.MINUTE));
+                            newEvent.setStartYear(startCal.get(Calendar.YEAR));
+                            newEvent.setStartMonth(startCal.get(Calendar.MONTH)+1);
+                            newEvent.setStartDay(startCal.get(Calendar.DAY_OF_MONTH));
+                            newEvent.setEndHour_Of_Day(23);
+                            newEvent.setEndMinute(59);
+                            newEvent.setEndYear(startCal.get(Calendar.YEAR));
+                            newEvent.setEndMonth(startCal.get(Calendar.MONTH)+1);
+                            newEvent.setEndDay(startCal.get(Calendar.DAY_OF_MONTH));
+                            startCal.add(Calendar.DAY_OF_MONTH,1);
+                            startCal.set(Calendar.HOUR_OF_DAY,0);
+                            startCal.set(Calendar.MINUTE, 0);
+                            Events.add(newEvent);
+                        }
+                        event.setStartHour_Of_Day(startCal.get(Calendar.HOUR_OF_DAY));
+                        event.setStartMinute(startCal.get(Calendar.MINUTE));
+                        event.setStartYear(startCal.get(Calendar.YEAR));
+                        event.setStartMonth(startCal.get(Calendar.MONTH)+1);
+                        event.setStartDay(startCal.get(Calendar.DAY_OF_MONTH));
+                        event.setEndHour_Of_Day(endCal.get(Calendar.HOUR_OF_DAY));
+                        event.setEndMinute(endCal.get(Calendar.MINUTE));
+                        event.setEndYear(endCal.get(Calendar.YEAR));
+                        event.setEndMonth(endCal.get(Calendar.MONTH)+1);
+                        event.setEndDay(endCal.get(Calendar.DAY_OF_MONTH));
+                        event.setLocation(eventLocationString);
                         Events.add(event);
                     }
                     cursor.moveToNext();

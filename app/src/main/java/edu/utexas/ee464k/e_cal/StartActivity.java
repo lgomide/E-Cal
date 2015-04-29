@@ -2,6 +2,7 @@ package edu.utexas.ee464k.e_cal;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -37,23 +38,13 @@ public class StartActivity extends Activity {
     public void startManualEntry(View v){
         LayoutInflater inflater = LayoutInflater.from(StartActivity.this);
         View startSettingsView = inflater.inflate(R.layout.fragment_manual_start_settings, null);
-        final EditText deviceId = (EditText) startSettingsView.findViewById(R.id.manualDeviceId);
         final EditText userName = (EditText) startSettingsView.findViewById(R.id.manualUserName);
         final AlertDialog settingsDialog = new AlertDialog.Builder(StartActivity.this)
-                .setTitle("Settings")
+                .setTitle("User Name")
                 .setView(startSettingsView)
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (deviceId.getText().toString().equals("")) {
-                            Toast.makeText(StartActivity.this, "Must Enter a Device ID", Toast.LENGTH_LONG).show();
-                            return;
-                        }
-                        int deviceIdInt = Integer.parseInt(deviceId.getText().toString());
-                        if (deviceIdInt != 1) {
-                            Toast.makeText(StartActivity.this, "Must Enter a Valid Device Id", Toast.LENGTH_LONG).show();
-                            return;
-                        }
                         if (userName.getText().toString().equals("")) {
                             Toast.makeText(StartActivity.this, "Must Enter User Name", Toast.LENGTH_LONG).show();
                             return;
@@ -65,7 +56,6 @@ public class StartActivity extends Activity {
                         Bundle data = new Bundle();
                         data.putParcelableArrayList("events", events);
                         i.putExtra("data", data);
-                        i.putExtra("deviceId",String.valueOf(deviceIdInt));
                         i.putExtra("userName", userNameString);
                         startActivity(i);
                     }

@@ -1,164 +1,248 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".OutlookActivity">
+    android:layout_height="match_parent"
+    tools:context=".OutlookActivity">
 
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Logout"
-        android:id="@+id/OutlookLogOut"
-        android:onClick="logoutOutlook"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true" />
+    <RelativeLayout
+        android:id="@+id/outlookActionBar"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/abc_action_bar_default_height"
+        android:background="@color/action_bar_color"
+        android:orientation="horizontal">
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="date"
-        android:ems="10"
-        android:id="@+id/outlookStartDate"
-        android:layout_below="@+id/outlookCalendarSettingsName"
-        android:layout_alignParentEnd="true"
-        android:focusable="false"
-        android:text="mm/dd/yyyy"
-        android:textAlignment="center" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/outlookEcal"
+            android:text="ECAL"
+            android:textStyle="bold"
+            android:textColor="#ffffffff"
+            android:textSize="26dp"
+            android:paddingTop="10dp"
+            android:paddingLeft="10dp" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="date"
-        android:ems="10"
-        android:id="@+id/outlookEndDate"
-        android:focusable="false"
-        android:text="mm/dd/yyyy"
-        android:textAlignment="center"
-        android:layout_below="@+id/outlookStartDate"
-        android:layout_alignParentEnd="true" />
+        <ImageButton
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Logout"
+            android:id="@+id/outlookLogOut"
+            android:onClick="logoutOutlook"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/logout_button"
+            android:background="#000010f2"
+            android:paddingTop="10dp"
+            android:paddingRight="10dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/outlookUser"
-        android:layout_alignTop="@+id/OutlookLogOut"
-        android:textSize="20dp" />
+    </RelativeLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Start Date:"
-        android:id="@+id/startDateNameOutlook"
-        android:textSize="24dp"
-        android:layout_above="@+id/outlookEndDate"
-        android:layout_alignParentStart="false" />
+    <ScrollView
+        android:id="@+id/outlookScrView"
+        android:layout_below="@+id/outlookActionBar"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/background_color">
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="End Date:"
-        android:id="@+id/endDateNameOutlook"
-        android:textSize="24dp"
-        android:layout_alignBottom="@+id/outlookEndDate"
-        android:layout_alignParentStart="true" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Calendar Settings"
+                android:id="@+id/outlookCalendarSettingsName"
+                android:textSize="30dp"
+                android:layout_centerHorizontal="true"
+                android:paddingTop="15dp"
+                android:textColor="@color/text_color"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Calendar Settings"
-        android:id="@+id/outlookCalendarSettingsName"
-        android:textSize="30dp"
-        android:layout_below="@+id/OutlookLogOut"
-        android:layout_centerHorizontal="true"
-        android:paddingTop="15dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:id="@+id/outlookUser"
+                android:layout_below="@+id/outlookCalendarSettingsName"
+                android:textSize="20dp"
+                android:text="User Name"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/text_color"/>
 
-    <Switch
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/outlookEventName"
-        android:paddingTop="20dp"
-        android:textSize="20dp"
-        android:layout_below="@+id/outlookEndDate"
-        android:layout_alignEnd="@+id/outlookEndDate"
-        android:onClick="toggleOutlookEventName" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/outlookIntervalImage"
+                android:layout_below="@+id/outlookUser"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/date_interval_image" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Event Name"
-        android:id="@+id/eventNameFieldOutlook"
-        android:layout_alignBottom="@+id/outlookEventName"
-        android:layout_alignParentStart="true"
-        android:textSize="24dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/outlookTimeIntervalName"
+                android:text="Time Interval"
+                android:layout_below="@+id/outlookIntervalImage"
+                android:layout_centerHorizontal="true"
+                android:textSize="25dp"
+                android:paddingBottom="10dp"
+                android:textColor="@color/text_color"/>
 
-    <Switch
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/outlookEventLocation"
-        android:paddingTop="20dp"
-        android:textSize="20dp"
-        android:layout_below="@+id/outlookEventName"
-        android:layout_alignParentEnd="true"
-        android:onClick="toggleOutlookEventLocation" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Event Location"
-        android:id="@+id/eventLocationFieldOutlook"
-        android:textSize="24dp"
-        android:layout_above="@+id/eventDescriptionOutlook"
-        android:layout_alignParentStart="true" />
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="date"
+                android:ems="10"
+                android:id="@+id/outlookStartDate"
+                android:layout_below="@+id/outlookTimeIntervalName"
+                android:layout_alignParentEnd="true"
+                android:focusable="false"
+                android:text="mm/dd/yyyy"
+                android:textAlignment="center"
+                android:textColor="@color/text_color"/>
 
-    <Switch
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/eventDescriptionOutlook"
-        android:paddingTop="20dp"
-        android:textSize="20dp"
-        android:layout_below="@+id/outlookEventLocation"
-        android:layout_alignParentEnd="true"
-        android:onClick="toggleOutlookEventDescription" />
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="date"
+                android:ems="10"
+                android:id="@+id/outlookEndDate"
+                android:focusable="false"
+                android:text="mm/dd/yyyy"
+                android:textAlignment="center"
+                android:layout_below="@+id/outlookStartDate"
+                android:layout_alignParentEnd="true"
+                android:textColor="@color/text_color" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Event Description"
-        android:id="@+id/eventDescriptionFieldOutlook"
-        android:textSize="24dp"
-        android:layout_alignBottom="@+id/eventDescriptionOutlook"
-        android:layout_alignParentStart="true" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Device Id"
-        android:id="@+id/deviceIdNameOutlook"
-        android:textSize="24dp"
-        android:layout_alignBottom="@+id/deviceIdOutlook"
-        android:layout_alignParentStart="true" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:id="@+id/deviceIdOutlook"
-        android:layout_below="@+id/eventDescriptionFieldOutlook"
-        android:layout_alignEnd="@+id/eventDescriptionOutlook"
-        android:layout_alignStart="@+id/eventDescriptionOutlook"
-        android:paddingTop="40dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Start Date:"
+                android:id="@+id/startDateNameOutlook"
+                android:textSize="24dp"
+                android:layout_alignBottom="@+id/outlookStartDate"
+                android:paddingBottom="10dp"
+                android:layout_alignParentStart="false"
+                android:textColor="@color/text_color" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Get Calendar Data"
-        android:id="@+id/getCalendarDataButtonOutlook"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:onClick="getCalendarDataOutlook" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="End Date:"
+                android:id="@+id/endDateNameOutlook"
+                android:textSize="24dp"
+                android:paddingBottom="10dp"
+                android:layout_alignBottom="@+id/outlookEndDate"
+                android:layout_alignParentStart="true"
+                android:textColor="@color/text_color" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/outlookEventNameImage"
+                android:src="@drawable/event_name_image"
+                android:layout_below="@id/outlookEndDate"
+                android:layout_centerHorizontal="true"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Event Name"
+                android:id="@+id/eventNameFieldOutlook"
+                android:layout_below="@+id/outlookEventNameImage"
+                android:layout_centerHorizontal="true"
+                android:textSize="24dp"
+                android:textColor="@color/text_color" />
+
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/outlookEventName"
+                android:paddingTop="20dp"
+                android:textSize="20dp"
+                android:layout_below="@+id/eventNameFieldOutlook"
+                android:layout_centerHorizontal="true"
+                android:onClick="toggleOutlookEventName" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/outlookEventLocationImage"
+                android:src="@drawable/event_location_image"
+                android:layout_below="@id/outlookEventName"
+                android:layout_centerHorizontal="true"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Event Location"
+                android:id="@+id/eventLocationFieldOutlook"
+                android:textSize="24dp"
+                android:layout_below="@+id/outlookEventLocationImage"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/text_color"/>
+
+
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/outlookEventLocation"
+                android:paddingTop="20dp"
+                android:textSize="20dp"
+                android:layout_below="@+id/eventLocationFieldOutlook"
+                android:layout_centerHorizontal="true"
+                android:onClick="toggleOutlookEventLocation" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/event_info_image"
+                android:id="@+id/outlookEventDescriptionImage"
+                android:layout_below="@+id/outlookEventLocation"
+                android:layout_centerHorizontal="true"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Event Description"
+                android:id="@+id/eventDescriptionFieldOutlook"
+                android:textSize="24dp"
+                android:layout_below="@+id/outlookEventDescriptionImage"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/text_color"/>
+
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/eventDescriptionOutlook"
+                android:paddingTop="20dp"
+                android:textSize="20dp"
+                android:layout_below="@+id/eventDescriptionFieldOutlook"
+                android:layout_centerHorizontal="true"
+                android:onClick="toggleOutlookEventDescription" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/send_button"
+                android:id="@+id/getCalendarDataButtonOutlook"
+                android:layout_below="@+id/eventDescriptionOutlook"
+                android:layout_centerHorizontal="true"
+                android:onClick="getCalendarDataOutlook"
+                android:background="#ffffff"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Get Events"
+                android:textColor="@color/text_color"
+                android:textSize="20dp"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/getCalendarDataButtonOutlook"/>
+
+
+        </RelativeLayout>
+    </ScrollView>
 
 </RelativeLayout>
